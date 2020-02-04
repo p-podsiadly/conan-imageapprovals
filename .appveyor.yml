@@ -1,0 +1,46 @@
+environment:
+  matrix:
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
+      CC: gcc-7
+      CXX: g++-7
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
+      CC: gcc-9
+      CXX: g++-9
+    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
+      CC: clang-9
+      CXX: clang++-9
+
+platform:
+  - x64
+
+configuration:
+  - Debug
+  - Release
+
+init:
+  - ps: >-
+      if($isWindows) {
+        $env:Path = "C:\Python37;C:\Python37\Scripts;" + $env:Path;
+        python -m pip install --upgrade pip;
+        python -m pip install pyyaml conan;
+      } elseif($isLinux) {
+        sudo apt install -y python3-pip;
+        sudo pip3 install pyyaml conan;
+      }
+
+  - cmd: conan user
+
+build_script:
+  - ps: >-
+      if($isWindows) {
+        python .ci/build.py;
+      } elseif($isLinux) {
+        python3 .ci/build.py;
+      }
+
+deploy_script:
+  - ps: conan remote add ppodsiadly https://api.bintray.com/conan/ppodsiadly/conan
+  - ps: conan user -r ppodsiadly -p $env:BINTRAY_API_KEY ppodsiadly
+  - ps: conan upload -r ppodsiadly --all imageapprovals/*
