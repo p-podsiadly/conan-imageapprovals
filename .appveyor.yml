@@ -35,4 +35,4 @@ build_script:
 deploy_script:
   - ps: conan remote add ppodsiadly https://api.bintray.com/conan/ppodsiadly/conan
   - ps: conan user -r ppodsiadly -p $env:BINTRAY_API_KEY ppodsiadly
-  - ps: conan upload -r ppodsiadly imageapprovals/*
+  - ps: conan upload -r ppodsiadly --confirm imageapprovals/*
