@@ -1,22 +1,14 @@
 environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
       CC: gcc-7
       CXX: g++-7
-    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
-      CC: gcc-9
-      CXX: g++-9
-    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu
-      CC: clang-9
-      CXX: clang++-9
 
 platform:
   - x64
 
 configuration:
-  - Debug
   - Release
 
 init:
@@ -43,4 +35,4 @@ build_script:
 deploy_script:
   - ps: conan remote add ppodsiadly https://api.bintray.com/conan/ppodsiadly/conan
   - ps: conan user -r ppodsiadly -p $env:BINTRAY_API_KEY ppodsiadly
-  - ps: conan upload -r ppodsiadly --all imageapprovals/*
+  - ps: conan upload -r ppodsiadly imageapprovals/*
