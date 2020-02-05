@@ -12,7 +12,7 @@ class ImageApprovalsConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
 
     requires = [
-        "approvaltests.cpp/8.1.0",
+        "approvaltests.cpp/8.2.0",
         "libpng/1.6.37",
         "openexr/2.4.0",
         "zlib/1.2.11"
